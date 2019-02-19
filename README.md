@@ -8,6 +8,10 @@ Generate Fake STIX 2 Json Data.
 
 Go to: `localhost:8080`
 
+# Build
+
+`mvn clean package`
+
 # API
 
 All Bundleable Objects (SDO, SRO, Data Marking's Marking Definition) and a Bundle itself can be generated through the REST API:
