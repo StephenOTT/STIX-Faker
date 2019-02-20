@@ -4,7 +4,7 @@ Generate Fake STIX 2 Json Data.
 
 # Deploy
 
-`java -jar stix-faker-0.5.jar`
+`java -jar stix-faker-0.5.1.jar`
 
 Go to: `localhost:8080`
 
