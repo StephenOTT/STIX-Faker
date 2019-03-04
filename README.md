@@ -2,6 +2,8 @@
 
 Generate Fake STIX 2 Json Data.
 
+Currently supported schema: STIX 2.0
+
 # Deploy
 
 `java -jar stix-faker-0.5.1.jar`
