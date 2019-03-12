@@ -6,7 +6,7 @@ Currently supported schema: STIX 2.0
 
 # Deploy
 
-`java -jar stix-faker-0.5.1.jar`
+`java -jar stix-faker-0.6.0.jar`
 
 Go to: `localhost:8080`
 
