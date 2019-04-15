@@ -6,7 +6,7 @@
 
     <groupId>io.digitalstate.stix.faker</groupId>
     <artifactId>stix-faker</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
     <packaging>jar</packaging>
 
     <name>STIX 2 Faker</name>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.github.StephenOTT</groupId>
             <artifactId>STIX-Java</artifactId>
-            <version>0.7.0</version>
+            <version>0.7.2</version>
         </dependency>
 
         <dependency>
