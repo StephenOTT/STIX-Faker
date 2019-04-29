@@ -606,6 +606,28 @@ Sample Response:
 
 GET `/api/sdo/observed-data`
 
+Observed-data supports a optional JSON body in the GET request.
+With this body you can configure the data generator.  
+
+Sample Request Body:
+
+```json
+{
+    "propCreatedProbability": 100,
+    "propFirstObservedSubsecondPrecision": 9,
+    "propLastObservedSubsecondPrecision": 6,
+    "macAddressCoo": {
+        "occurrence_probability": 100,
+        "occurs_count_lower": 99,
+        "occurs_count_upper": 100
+    }
+} 
+```
+
+See the `ObservedDataGeneratorConfig.class` in io.digitalstate.stix.faker; 
+all of the properties can be used for modification. 
+
+
 Sample Response:
 
 ```json

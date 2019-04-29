@@ -1,23 +1,27 @@
 package io.digitalstate.stix.faker;
 
+import io.digitalstate.stix.faker.configs.ObservedDataGeneratorConfig;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 
 import java.util.Optional;
 
 public class GeneratorVerticle extends AbstractVerticle {
 
-    private StixFakeDataGenerator generator = new StixFakeDataGenerator();
+    private StixMockDataGenerator generator = new StixMockDataGenerator();
 
     @Override
     public void start() throws Exception {
 
         HttpServer server = vertx.createHttpServer(new HttpServerOptions());
         Router router = Router.router(vertx);
+
+        router.route().handler(BodyHandler.create());
 
         router.route(HttpMethod.GET, "/api/sdo/attack-pattern").handler(routingContext -> {
 
@@ -75,13 +79,19 @@ public class GeneratorVerticle extends AbstractVerticle {
             response.end(generator.mockMalware().toJsonString());
         });
 
-        router.route(HttpMethod.GET, "/api/sdo/observed-data").handler(routingContext -> {
+        router.route(HttpMethod.GET, "/api/sdo/observed-data")
+                .handler(routingContext -> {
+                    HttpServerResponse response = routingContext.response();
+                    response.putHeader("content-type", "application/json");
 
-            HttpServerResponse response = routingContext.response();
-            response.putHeader("content-type", "application/json");
+                    if (routingContext.getBody().length() > 0){
+                        ObservedDataGeneratorConfig genConfig = routingContext.getBodyAsJson().mapTo(ObservedDataGeneratorConfig.class);
+                        response.end(generator.mockObservedData(genConfig).toJsonString());
 
-            response.end(generator.mockObservedData().toJsonString());
-        });
+                    } else {
+                        response.end(generator.mockObservedData().toJsonString());
+                    }
+                });
 
         router.route(HttpMethod.GET, "/api/sdo/report").handler(routingContext -> {
 

@@ -1,25 +1,11 @@
 package io.digitalstate.stix.faker
 
-
+import io.digitalstate.stix.faker.configs.ObservedDataGeneratorConfig
 import io.digitalstate.stix.bundle.Bundle
-import io.digitalstate.stix.coo.extension.types.ArchiveFileExtension
-import io.digitalstate.stix.coo.extension.types.HttpRequestExtension
-import io.digitalstate.stix.coo.extension.types.IcmpExtension
-import io.digitalstate.stix.coo.extension.types.NetworkSocketExtension
-import io.digitalstate.stix.coo.extension.types.NtfsFileExtenstion
-import io.digitalstate.stix.coo.extension.types.PdfFileExtension
-import io.digitalstate.stix.coo.extension.types.RasterImageFileExtension
-import io.digitalstate.stix.coo.extension.types.TcpExtension
-import io.digitalstate.stix.coo.extension.types.UnixAccountExtension
-import io.digitalstate.stix.coo.extension.types.WindowsPeBinaryFileExtension
-import io.digitalstate.stix.coo.extension.types.WindowsProcessExtension
-import io.digitalstate.stix.coo.extension.types.WindowsServiceExtension
+import io.digitalstate.stix.common.StixInstant
+import io.digitalstate.stix.coo.extension.types.*
 import io.digitalstate.stix.coo.objects.*
-import io.digitalstate.stix.coo.types.MimePartType
-import io.digitalstate.stix.coo.types.NtfsAlternateDataStream
-import io.digitalstate.stix.coo.types.WindowsPeOptionalHeader
-import io.digitalstate.stix.coo.types.WindowsPeSection
-import io.digitalstate.stix.coo.types.WindowsRegistryValue
+import io.digitalstate.stix.coo.types.*
 import io.digitalstate.stix.datamarkings.GranularMarking
 import io.digitalstate.stix.datamarkings.MarkingDefinition
 import io.digitalstate.stix.datamarkings.objects.Statement
@@ -30,35 +16,14 @@ import io.digitalstate.stix.sdo.types.ExternalReference
 import io.digitalstate.stix.sdo.types.KillChainPhase
 import io.digitalstate.stix.sro.objects.Relationship
 import io.digitalstate.stix.sro.objects.Sighting
-import io.digitalstate.stix.vocabulary.vocabularies.AccountTypes
-import io.digitalstate.stix.vocabulary.vocabularies.AttackMotivations
-import io.digitalstate.stix.vocabulary.vocabularies.AttackResourceLevels
-import io.digitalstate.stix.vocabulary.vocabularies.EncryptionAlgorithms
-import io.digitalstate.stix.vocabulary.vocabularies.IdentityClasses
-import io.digitalstate.stix.vocabulary.vocabularies.IndicatorLabels
-import io.digitalstate.stix.vocabulary.vocabularies.IndustrySectors
-import io.digitalstate.stix.vocabulary.vocabularies.MalwareLabels
-import io.digitalstate.stix.vocabulary.vocabularies.NetworkSocketAddressFamilies
-import io.digitalstate.stix.vocabulary.vocabularies.NetworkSocketProtocolFamilies
-import io.digitalstate.stix.vocabulary.vocabularies.NetworkSocketTypes
-import io.digitalstate.stix.vocabulary.vocabularies.ReportLabels
-import io.digitalstate.stix.vocabulary.vocabularies.ThreatActorLabels
-import io.digitalstate.stix.vocabulary.vocabularies.ThreatActorRoles
-import io.digitalstate.stix.vocabulary.vocabularies.ThreatActorSophistication
-import io.digitalstate.stix.vocabulary.vocabularies.TlpLevels
-import io.digitalstate.stix.vocabulary.vocabularies.ToolLabels
-import io.digitalstate.stix.vocabulary.vocabularies.WindowsPeBinaryTypes
-import io.digitalstate.stix.vocabulary.vocabularies.WindowsRegistryValueDataTypes
-import io.digitalstate.stix.vocabulary.vocabularies.WindowsServiceStartTypes
-import io.digitalstate.stix.vocabulary.vocabularies.WindowsServiceStatuses
-import io.digitalstate.stix.vocabulary.vocabularies.WindowsServiceTypes
+import io.digitalstate.stix.vocabulary.vocabularies.*
 import net.andreinc.mockneat.MockNeat
 
 import java.time.Instant
 import java.time.LocalDate
 import java.util.concurrent.ThreadLocalRandom
 
-public class StixFakeDataGenerator {
+public class StixMockDataGenerator {
 
     // MockNeat object
     MockNeat mock = MockNeat.threadLocal()
@@ -188,11 +153,10 @@ public class StixFakeDataGenerator {
                 .name(mock.words().accumulate(mock.ints().range(1, 5).get(), " ").get())
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
+        builder.created(new StixInstant(objectCreated))
+
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
-            if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
-            }
+            builder.modified(new StixInstant(generateRandomDate(commonLowerDate, objectCreated)))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -256,9 +220,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -274,11 +238,11 @@ public class StixFakeDataGenerator {
 
         Instant firstSeen = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.firstSeen(firstSeen)
+            builder.firstSeen(new StixInstant(firstSeen))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.lastSeen(generateRandomDate(firstSeen, Instant.now()))
+            builder.lastSeen(new StixInstant(generateRandomDate(firstSeen, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -332,9 +296,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -395,9 +359,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -457,9 +421,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -476,10 +440,10 @@ public class StixFakeDataGenerator {
         builder.pattern("SOME PATTERN GOES HERE")
 
         Instant validFrom = generateRandomDate(commonLowerDate, Instant.now())
-        builder.validFrom(validFrom)
+        builder.validFrom(new StixInstant(validFrom))
 
         if (mock.bools().probability(50).get()) {
-            builder.validUntil(generateRandomDate(validFrom, Instant.now()))
+            builder.validUntil(new StixInstant(generateRandomDate(validFrom, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -526,9 +490,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -546,11 +510,11 @@ public class StixFakeDataGenerator {
 
         Instant firstSeen = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.firstSeen(firstSeen)
+            builder.firstSeen(new StixInstant(firstSeen))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.lastSeen(generateRandomDate(firstSeen, Instant.now()))
+            builder.lastSeen(new StixInstant(generateRandomDate(firstSeen, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -611,9 +575,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -664,159 +628,160 @@ public class StixFakeDataGenerator {
         return builder.build()
     }
 
-    ObservedData mockObservedData() {
+    ObservedData mockObservedData(ObservedDataGeneratorConfig config = new ObservedDataGeneratorConfig()) {
         ObservedData.Builder builder = ObservedData.builder()
 
-        Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
-        if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
-            if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+        Instant objectCreated = generateRandomDate(config.propCreatedLowerDate, config.propCreatedUpperDate)
+        if (mock.bools().probability(config.propCreatedProbability).get()) {
+            builder.created(new StixInstant(objectCreated, config.propCreatedDateSubsecondPrecision))
+            if (mock.bools().probability(config.propModifiedProbability).get()) {
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, config.propModifiedUpperDate), config.propModifiedSubsecondPrecision))
             }
         }
 
-        Instant firstObserved = generateRandomDate(commonLowerDate, Instant.now())
-        builder.firstObserved(firstObserved)
+        Instant firstObserved = generateRandomDate(config.propFirstObservedLowerDate, config.propFirstObservedUpperDate)
+        builder.firstObserved(new StixInstant(firstObserved, config.propFirstObservedSubsecondPrecision))
 
-        builder.lastObserved(generateRandomDate(firstObserved, Instant.now()))
+        builder.lastObserved(new StixInstant(generateRandomDate(firstObserved, config.propLastObservedUpperDate), config.propLastObservedSubsecondPrecision))
 
-        builder.numberObserved(mock.ints().range(1, 999999999).get())
+        builder.numberObserved(mock.ints().range(config.propNumberObservedLowerCount, config.propNumberObservedUpperCount).get())
 
-        builder.addObject(mockArtifactCoo())
 
-        //@TODO Replace the below with if statements per COO.  Then for each IF, do a range.get.Times{} to add N artifacts.
-        // worry about the Refs in a later iteration of tests.
-        builder.addObject(mockArtifactCoo())
+        if (mock.bools().probability(config.artifactCoo.occurrence_probability).get()) {
+            mock.ints().range(config.artifactCoo.occurs_count_lower, config.artifactCoo.occurs_count_upper).get().times {
+                builder.addObject(mockArtifactCoo())
+            }
+        }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.autonomousSystemCoo.occurrence_probability).get()) {
+            mock.ints().range(config.autonomousSystemCoo.occurs_count_lower, config.autonomousSystemCoo.occurs_count_upper).get().times {
                 builder.addObject(mockAutonomousSystemCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.directoryCoo.occurrence_probability).get()) {
+            mock.ints().range(config.directoryCoo.occurs_count_lower, config.directoryCoo.occurs_count_upper).get().times {
                 builder.addObject(mockDirectoryCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.domainNameCoo.occurrence_probability).get()) {
+            mock.ints().range(config.domainNameCoo.occurs_count_lower, config.domainNameCoo.occurs_count_upper).get().times {
                 builder.addObject(mockDomainNameCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.emailAddressCoo.occurrence_probability).get()) {
+            mock.ints().range(config.emailAddressCoo.occurs_count_lower, config.emailAddressCoo.occurs_count_upper).get().times {
                 builder.addObject(mockEmailAddressCoo())
             }
         }
 
         //@TODO Refactor to pass in Email address objects and artifacts
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.emailMessageCoo.occurrence_probability).get()) {
+            mock.ints().range(config.emailMessageCoo.occurs_count_lower, config.emailMessageCoo.occurs_count_upper).get().times {
                 builder.addObject(mockEmailMessageCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.fileCoo.occurrence_probability).get()) {
+            mock.ints().range(config.fileCoo.occurs_count_lower, config.fileCoo.occurs_count_upper).get().times {
                 builder.addObject(mockFileCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.ipv4AddressCoo.occurrence_probability).get()) {
+            mock.ints().range(config.ipv4AddressCoo.occurs_count_lower, config.ipv4AddressCoo.occurs_count_upper).get().times {
                 builder.addObject(mockIpv4AddressCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.ipv6AddressCoo.occurrence_probability).get()) {
+            mock.ints().range(config.ipv6AddressCoo.occurs_count_lower, config.ipv6AddressCoo.occurs_count_upper).get().times {
                 builder.addObject(mockIpv6AddressCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.macAddressCoo.occurrence_probability).get()) {
+            mock.ints().range(config.macAddressCoo.occurs_count_lower, config.macAddressCoo.occurs_count_upper).get().times {
                 builder.addObject(mockMacAddress())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.mutexCoo.occurrence_probability).get()) {
+            mock.ints().range(config.mutexCoo.occurs_count_lower, config.mutexCoo.occurs_count_upper).get().times {
                 builder.addObject(mockMutexCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.networkTrafficCoo.occurrence_probability).get()) {
+            mock.ints().range(config.networkTrafficCoo.occurs_count_lower, config.networkTrafficCoo.occurs_count_upper).get().times {
                 builder.addObject(mockNetworkTrafficCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.processCoo.occurrence_probability).get()) {
+            mock.ints().range(config.processCoo.occurs_count_lower, config.processCoo.occurs_count_upper).get().times {
                 builder.addObject(mockProcessCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.softwareCoo.occurrence_probability).get()) {
+            mock.ints().range(config.softwareCoo.occurs_count_lower, config.softwareCoo.occurs_count_upper).get().times {
                 builder.addObject(mockSoftwareCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
-                builder.addObject(mockUrl())
+        if (mock.bools().probability(config.urlCoo.occurrence_probability).get()) {
+            mock.ints().range(config.urlCoo.occurs_count_lower, config.urlCoo.occurs_count_upper).get().times {
+                builder.addObject(mockUrlCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
-                builder.addObject(mockUserAccount())
+        if (mock.bools().probability(config.userAccountCoo.occurrence_probability).get()) {
+            mock.ints().range(config.userAccountCoo.occurs_count_lower, config.userAccountCoo.occurs_count_upper).get().times {
+                builder.addObject(mockUserAccountCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.windowsRegisteryKeyCoo.occurrence_probability).get()) {
+            mock.ints().range(config.windowsRegisteryKeyCoo.occurs_count_lower, config.windowsRegisteryKeyCoo.occurs_count_upper).get().times {
                 builder.addObject(mockWindowsRegistryKeyCoo())
             }
         }
 
-        if (mock.bools().probability(10).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.x509CertificateCoo.occurrence_probability).get()) {
+            mock.ints().range(config.x509CertificateCoo.occurs_count_lower, config.x509CertificateCoo.occurs_count_upper).get().times {
                 builder.addObject(mockX509CertificateCoo())
             }
         }
 
-        if (mock.bools().probability(50).get()) {
-            mock.ints().range(0, 10).get().times {
+        if (mock.bools().probability(config.externalReferences.occurrence_probability).get()) {
+            mock.ints().range(config.externalReferences.occurs_count_lower, config.externalReferences.occurs_count_upper).get().times {
                 builder.addExternalReferences(mockExternalReference())
             }
         }
 
-        if (mock.bools().probability(50).get()) {
+        if (mock.bools().probability(config.propRevokedProbability).get()) {
             builder.revoked(true)
         }
 
-        if (mock.bools().probability(50).get()) {
+        if (mock.bools().probability(config.propCustomPropsProbability).get()) {
             builder.customProperties(generateCustomProperties())
         }
 
-        if (mock.bools().probability(50).get()) {
+        if (mock.bools().probability(config.propCreatedByRefProbability).get()) {
             builder.createdByRef(mockIdentity())
         }
 
-        if (mock.bools().probability(50).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.objectMarkings.occurrence_probability).get()) {
+            mock.ints().range(config.objectMarkings.occurs_count_lower, config.objectMarkings.occurs_count_upper).get().times {
                 builder.addObjectMarkingRef(mockMarkingDefinition())
             }
         }
 
-        if (mock.bools().probability(50).get()) {
-            mock.ints().range(1, 5).get().times {
+        if (mock.bools().probability(config.granuarMarkings.occurrence_probability).get()) {
+            mock.ints().range(config.granuarMarkings.occurs_count_lower, config.granuarMarkings.occurs_count_upper).get().times {
                 builder.addGranularMarking(mockGranularMarking())
             }
         }
@@ -878,16 +843,16 @@ public class StixFakeDataGenerator {
 
         Instant created = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(created)
+            builder.created(new StixInstant(created))
         }
 
         Instant modified = generateRandomDate(created, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.modified(modified)
+            builder.modified(new StixInstant(modified))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.accessed(generateRandomDate(created, Instant.now()))
+            builder.accessed(new StixInstant(generateRandomDate(created, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -943,7 +908,7 @@ public class StixFakeDataGenerator {
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.date(generateRandomDate(commonLowerDate, Instant.now()))
+            builder.date(new StixInstant(generateRandomDate(commonLowerDate, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1093,15 +1058,15 @@ public class StixFakeDataGenerator {
 
         Instant created = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(created)
+            builder.created(new StixInstant(created))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.modified(generateRandomDate(created, Instant.now()))
+            builder.modified(new StixInstant(generateRandomDate(created, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.accessed(generateRandomDate(created, Instant.now()))
+            builder.accessed(new StixInstant(generateRandomDate(created, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1212,11 +1177,11 @@ public class StixFakeDataGenerator {
 
         Instant start = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.start(start)
+            builder.start(new StixInstant(start))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.end(generateRandomDate(start, Instant.now()))
+            builder.end(new StixInstant(generateRandomDate(start, Instant.now())))
         }
 
         // 33% true, 33% false, 33% never set / null:
@@ -1342,7 +1307,7 @@ public class StixFakeDataGenerator {
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.created(generateRandomDate(commonLowerDate, Instant.now()))
+            builder.created(new StixInstant(generateRandomDate(commonLowerDate, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1372,7 +1337,7 @@ public class StixFakeDataGenerator {
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.creatorUserRef(mockUserAccount().getObservableObjectKey())
+            builder.creatorUserRef(mockUserAccountCoo().getObservableObjectKey())
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1416,7 +1381,7 @@ public class StixFakeDataGenerator {
         return builder.build()
     }
 
-    Url mockUrl() {
+    Url mockUrlCoo() {
         Url.Builder builder = Url.builder()
 
         builder.value(mock.urls().get())
@@ -1424,7 +1389,7 @@ public class StixFakeDataGenerator {
         return builder.build()
     }
 
-    UserAccount mockUserAccount() {
+    UserAccount mockUserAccountCoo() {
         UserAccount.Builder builder = UserAccount.builder()
 
         if (mock.bools().probability(50).get()) {
@@ -1483,24 +1448,24 @@ public class StixFakeDataGenerator {
 
         Instant accountCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.accountCreated(accountCreated)
+            builder.accountCreated(new StixInstant(accountCreated))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.accountExpires(generateRandomDate(accountCreated, Instant.now().plusMillis(1000000)))
+            builder.accountExpires(new StixInstant(generateRandomDate(accountCreated, Instant.now().plusMillis(1000000))))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.passwordLastChanged(generateRandomDate(accountCreated, Instant.now()))
+            builder.passwordLastChanged(new StixInstant(generateRandomDate(accountCreated, Instant.now())))
         }
 
         Instant firstLogin = generateRandomDate(accountCreated, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.accountFirstLogin(firstLogin)
+            builder.accountFirstLogin(new StixInstant(firstLogin))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.accountLastLogin(generateRandomDate(firstLogin, Instant.now()))
+            builder.accountLastLogin(new StixInstant(generateRandomDate(firstLogin, Instant.now())))
         }
 
         return builder.build()
@@ -1518,11 +1483,11 @@ public class StixFakeDataGenerator {
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.modified(generateRandomDate(commonLowerDate, Instant.now()))
+            builder.modified(new StixInstant(generateRandomDate(commonLowerDate, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.creatorUserRef(mockUserAccount().getObservableObjectKey())
+            builder.creatorUserRef(mockUserAccountCoo().getObservableObjectKey())
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1593,11 +1558,11 @@ public class StixFakeDataGenerator {
 
         Instant validityNotBefore = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.validityNotBefore(validityNotBefore)
+            builder.validityNotBefore(new StixInstant(validityNotBefore))
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.validityNotAfter(generateRandomDate(validityNotBefore, Instant.now().plusMillis(1000000)))
+            builder.validityNotAfter(new StixInstant(generateRandomDate(validityNotBefore, Instant.now().plusMillis(1000000))))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -1626,9 +1591,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -1642,7 +1607,7 @@ public class StixFakeDataGenerator {
             builder.description(mock.words().accumulate(mock.ints().range(1, 50).get(), " ").get())
         }
 
-        builder.published(generateRandomDate(commonLowerDate, Instant.now()))
+        builder.published(new StixInstant(generateRandomDate(commonLowerDate, Instant.now())))
 
         mock.ints().range(1, 50).get().times {
             switch (mock.ints().range(1, 14).get()) {
@@ -1729,9 +1694,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -1825,9 +1790,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -1891,9 +1856,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -2002,7 +1967,7 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
         }
 
         String type = mock.fromStrings("tlp", "statement").get()
@@ -2070,9 +2035,9 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
@@ -2372,20 +2337,20 @@ public class StixFakeDataGenerator {
 
         Instant objectCreated = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.created(objectCreated)
+            builder.created(new StixInstant(objectCreated))
             if (mock.bools().probability(50).get()) {
-                builder.modified(generateRandomDate(objectCreated, Instant.now()))
+                builder.modified(new StixInstant(generateRandomDate(objectCreated, Instant.now())))
             }
         }
 
         Instant firstSeen = generateRandomDate(commonLowerDate, Instant.now())
         if (mock.bools().probability(50).get()) {
-            builder.firstSeen(firstSeen)
+            builder.firstSeen(new StixInstant(firstSeen))
         }
 
         //@TODO This data will fail tests in the future as it create dates that are BEFORE the firstSeen.  Not currently enforced
         if (mock.bools().probability(50).get()) {
-            builder.lastSeen(generateRandomDate(firstSeen, Instant.now()))
+            builder.lastSeen(new StixInstant(generateRandomDate(firstSeen, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -2707,7 +2672,7 @@ public class StixFakeDataGenerator {
         }
 
         if (mock.bools().probability(50).get()) {
-            builder.timeDateStamp(generateRandomDate(commonLowerDate, Instant.now()))
+            builder.timeDateStamp(new StixInstant(generateRandomDate(commonLowerDate, Instant.now())))
         }
 
         if (mock.bools().probability(50).get()) {
@@ -3003,5 +2968,4 @@ public class StixFakeDataGenerator {
 
         return builder.build()
     }
-
 }
