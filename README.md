@@ -620,7 +620,9 @@ Sample Request Body:
         "occurrence_probability": 100,
         "occurs_count_lower": 99,
         "occurs_count_upper": 100
-    }
+    },
+    "propCreatedLowerDate": "2019-01-01T12:00:00.000Z",
+    "propCreatedUpperDate": "2019-01-02T12:00:00.000Z"
 } 
 ```
 
